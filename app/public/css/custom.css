@@ -1,17 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oranienbaum&display=swap');
+
 .flexbox-center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .tint {
-  font-family: 'Abril Fatface', cursive;
   background: linear-gradient(
-    rgba(255, 255, 255, .9),
-    rgba(255, 255, 255, .4)),
-    url("/bg.jpg") 50% / cover fixed;
+    rgba(0, 0, 0, 1),
+    rgba(0, 0, 0, .1)),
+    url("/bg3.jpg") 50% / cover fixed;
 
   height: 100%;
   padding: 1.5em;
   height: 100vh;
+}
+h1{
+  font-family: 'Oranienbaum', serif;
+  color: #fff;
 }

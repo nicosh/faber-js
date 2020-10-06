@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@cleandersonlobo/react-mic": "^1.2.0",
+    "audiobuffer-to-wav": "^1.0.0",
     "deepspeech": "^0.8.2",
     "memory-stream": "^1.0.0",
     "memorystream": "^0.3.1",

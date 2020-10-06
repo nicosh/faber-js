@@ -9,10 +9,13 @@ const N_CONTEXT = 9;
 const ALPHABET = './models/alphabet.txt'
 const BEAM_WIDTH = 500;
 const MODEL_PREFIX = "transfer_model_"
+const fetch = require('node-fetch');
 
-const babelfish = (file, usetransfer) => {
+const babelfish = async (file, usetransfer,x) => {
+	var path = require("path");
+	console.log(x)
 	const pathprefix = usetransfer ? MODEL_PREFIX : ""
-	let modelPath = `./models/${pathprefix}output_graph.pbmm`;
+	let modelPath = path.resolve(`./DeepSpeech/models/${pathprefix}output_graph.pbmm`);
 	const model = new DeepSpeech.Model(
 		modelPath,
 		N_FEATURES,
@@ -22,21 +25,27 @@ const babelfish = (file, usetransfer) => {
 	);
 
 	let desiredSampleRate = model.sampleRate();
-	let scorerPath = `./models/${pathprefix}scorer`;
+	console.log(desiredSampleRate)
+	let scorerPath = 	path.resolve(`./DeepSpeech/models/${pathprefix}scorer`);
+
 
 	model.enableExternalScorer(scorerPath);
-	let audioFile = file;
+	let audioFile = path.resolve(file);
 	if (!Fs.existsSync(audioFile)) {
 		console.log('file missing:', audioFile);
 		process.exit();
 	}
 
-	const buffer = Fs.readFileSync(audioFile);
+	const buffer =  x //Fs.readFileSync(audioFile);
+
+
 	const result = Wav.decode(buffer);
 
 	if (result.sampleRate < desiredSampleRate) {
 		console.error('Warning: original sample rate (' + result.sampleRate + ') is lower than ' + desiredSampleRate + 'Hz. Up-sampling might produce erratic speech recognition.');
 	}
+
+	
 
 	function bufferToStream(buffer) {
 		let stream = new Duplex();
@@ -74,5 +83,5 @@ const babelfish = (file, usetransfer) => {
 		console.log('result:', result);
 	})
 }
-
-babelfish("./models/test3.wav", false)
+module.exports = babelfish
+//babelfish("./DeepSpeech/models/test.wav", false)
