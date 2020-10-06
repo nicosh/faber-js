@@ -8,6 +8,8 @@
 # testing
 /coverage
 /DeepSpeech/models/*.pbmm
+/DeepSpeech/models
+
 *.pbmm
 # next.js
 /.next/
