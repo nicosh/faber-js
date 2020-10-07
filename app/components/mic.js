@@ -56,7 +56,6 @@ class Mic extends React.Component {
   renderRecognitionOutput() {
     let r = this.state.recognitionOutput[0]
     if(r){
-      console.log(r)
       return (
         <div className="row flexbox-center fullh">
           <div className="col-md-12">
@@ -126,7 +125,7 @@ class Mic extends React.Component {
       this.recordingInterval = setInterval(() => {
         let recordingTime = new Date().getTime() - this.state.recordingStart;
         this.setState({ recordingTime });
-      }, 3000);
+      }, 1000);
 
 
       this.setState({
@@ -233,7 +232,7 @@ class Mic extends React.Component {
     let { record,recording } = this.state
     return (
       <div>
-        <h1>Press space for   {recording ? "stop" : "start"} recording</h1>
+        <h1>Press space and   {recording ? "stop" : "start"} listening</h1>
         {this.renderRecognitionOutput()}
        
       </div>

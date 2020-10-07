@@ -1,12 +1,10 @@
-var natural = require('natural');
+const natural = require('natural');
 const corpus = require("./corpus")
-const PorterStemmerIt = require('../../node_modules/natural/lib/natural/stemmers/porter_stemmer_it');
-const { promisify } = require('util')
-
-var NGrams = natural.NGrams;
+//const PorterStemmerIt = require('../../node_modules/natural/lib/natural/stemmers/porter_stemmer_it');
+const NGrams = natural.NGrams;
 
 const SaveClassifier = () => {
-    var classifier = new natural.BayesClassifier();
+    let classifier = new natural.BayesClassifier();
     corpus.forEach(el => {
         let { testo, titolo } = el
         let trigrams = NGrams.trigrams(testo)
@@ -27,12 +25,10 @@ const LoadClassifier = async (text, obj) => {
         natural.BayesClassifier.load('./DeepSpeech/corpus/classifier.json', null, function (err, classifier) {
             if (err) {
                 return reject(err);
-
             } else {
                 let guess = classifier.classify(text)
                 let data =  { ...obj, guess }
                 resolve(data);
-
             }
         });
     })
