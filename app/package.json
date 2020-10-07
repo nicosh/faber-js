@@ -10,16 +10,21 @@
   "dependencies": {
     "@cleandersonlobo/react-mic": "^1.2.0",
     "audiobuffer-to-wav": "^1.0.0",
+    "busboy": "^0.3.1",
     "deepspeech": "^0.8.2",
     "memory-stream": "^1.0.0",
     "memorystream": "^0.3.1",
     "next": "9.5.3",
+    "next-absolute-url": "^1.2.2",
     "node-record-lpcm16": "^1.0.1",
     "node-wav": "0.0.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-mic": "^12.4.6",
     "sox": "^0.1.0",
-    "stream": "0.0.2"
+    "stream": "0.0.2",
+    "wav": "^1.0.2",
+    "wav-headers": "^1.0.1",
+    "wavefile": "^11.0.0"
   }
 }

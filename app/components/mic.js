@@ -80,7 +80,7 @@ class Mic extends React.Component {
                     backgroundColor="#00000"
                     sampleRate={16000}      
                     channelCount={1}    
-                    bitRate={256000} 
+                    bitRate={128} 
 
                     />
             </div>
