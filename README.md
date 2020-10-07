@@ -5,7 +5,7 @@
 `docker build --tag "faberjs" .`  
 `docker run  -p 3000:3000 faberjs`  
 
-### manual isntallation 
+### manual installation 
 clone the repo :  
 `git clone https://github.com/nicosh/faber-js.git`  
 
