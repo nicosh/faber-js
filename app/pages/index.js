@@ -24,8 +24,6 @@ class Index extends React.Component {
     let {reactmic} = this.state
     return (
       <div className="tint text-center">
-                <h1>Press space and start recording</h1>
-
         <Mic/>
       </div>
     )

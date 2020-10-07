@@ -4,6 +4,8 @@ import { ReactMic } from 'react-mic';
 import absoluteUrl from 'next-absolute-url'
 import io from 'socket.io-client';
 const DOWNSAMPLING_WORKER = './downsampling_worker.js';
+import TextTransition, { presets } from "react-text-transition";
+import Progress from './progress'
 
 class Mic extends React.Component {
 
@@ -16,7 +18,8 @@ class Mic extends React.Component {
       recording: false,
       recordingStart: 0,
       recordingTime: 0,
-      recognitionOutput: []
+      recognitionOutput: [],
+      progress : 0
     }
   }
 
@@ -51,11 +54,40 @@ class Mic extends React.Component {
   }
 
   renderRecognitionOutput() {
-    return (<ul>
-      {this.state.recognitionOutput.map((r) => {
-        return (<li key={r.id}>{r.text}</li>);
-      })}
-    </ul>)
+    let r = this.state.recognitionOutput[0]
+    if(r){
+      console.log(r)
+      return (
+        <div className="row flexbox-center fullh">
+          <div className="col-md-12">
+          <TextTransition
+            inline={true}
+            delay={300}
+            className={"big"}
+            text={r.text}
+            direction={"up"}
+            springConfig={presets.gentle}
+            spring={presets.gentle}
+  
+          />
+          <br/>
+          <TextTransition
+            inline={true}
+            delay={300}
+            className={"big2"}
+            text={r.guess}
+            direction={"up"}
+            springConfig={presets.gentle}
+            spring={presets.gentle}
+  
+          />
+          </div>
+
+        </div>)
+    }else{
+      return <></>
+    }
+
   }
 
   createAudioProcessor(audioContext, audioSource) {
@@ -86,17 +118,22 @@ class Mic extends React.Component {
     return processor;
   }
 
+
+ 
+
   startRecording = e => {
     if (!this.state.recording) {
       this.recordingInterval = setInterval(() => {
         let recordingTime = new Date().getTime() - this.state.recordingStart;
         this.setState({ recordingTime });
-      }, 100);
+      }, 3000);
+
 
       this.setState({
         recording: true,
         recordingStart: new Date().getTime(),
-        recordingTime: 0
+        recordingTime: 0,
+        progress : 0
       }, () => {
         this.startMicrophone();
       });
@@ -134,14 +171,18 @@ class Mic extends React.Component {
   }
 
   stopRecording = e => {
+    let { timer } = this.state
+
     if (this.state.recording) {
       if (this.socket.connected) {
         this.socket.emit('stream-reset');
       }
       clearInterval(this.recordingInterval);
+
       this.setState({
         recording: false,
-        recognitionOutput : []
+        progress : 0,
+        recognitionOutput: []
       }, () => {
         this.stopMicrophone();
       });
@@ -166,19 +207,21 @@ class Mic extends React.Component {
 
   finishTimer = async () => {
     let { timer } = this.state
-    clearTimeout(timer);
+
     this.stopRecording()
   }
 
 
 
   onKeyDownHandler = e => {
-    let { timer,recording } = this.state
+    let { timer, recording } = this.state
     if (e.keyCode == 32) {
       console.log(recording)
-      if(recording){
+      if (recording) {      
+
         this.stopRecording()
-      }else{
+      } else {
+
         this.startRecording()
 
       }
@@ -187,11 +230,12 @@ class Mic extends React.Component {
 
 
   render() {
-    let { record } = this.state
+    let { record,recording } = this.state
     return (
       <div>
+        <h1>Press space for   {recording ? "stop" : "start"} recording</h1>
         {this.renderRecognitionOutput()}
-        {this.renderTime()}
+       
       </div>
     )
   }

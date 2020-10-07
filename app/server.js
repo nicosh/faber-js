@@ -10,7 +10,7 @@ const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
-
+const {LoadClassifier} = require("./DeepSpeech/corpus/classifier")
 let DEEPSPEECH_MODEL = __dirname + '/DeepSpeech/models/'; // path to deepspeech english model directory
 let SILENCE_THRESHOLD = 200; // how many milliseconds of inactivity before processing the audio
 const SERVER_PORT = 4000; // websocket server port
@@ -165,7 +165,12 @@ function finishStream() {
 		if (text) {
 			console.log('');
 			console.log('Recognized Text:', text);
-			let recogTime = new Date().getTime() - start.getTime();
+            let recogTime = new Date().getTime() - start.getTime();
+            let tmp = {
+				text,
+				recogTime,
+				audioLength: Math.round(recordedAudioLength)
+			}
 			return {
 				text,
 				recogTime,
@@ -200,15 +205,17 @@ io.on('connection', function(socket) {
 	
 	createStream();
 	
-	socket.on('stream-data', function(data) {
-		processAudioStream(data, (results) => {
-			socket.emit('recognize', results);
+	socket.on('stream-data', async function(data) {
+		processAudioStream(data, async (results) => {
+            let x = await LoadClassifier(results.text,results)
+			socket.emit('recognize', x);
 		});
 	});
 	
-	socket.on('stream-end', function() {
-		endAudioStream((results) => {
-			socket.emit('recognize', results);
+	socket.on('stream-end', async function() {
+		endAudioStream(async (results) => {
+            let x = await LoadClassifier(results.text,results)
+			socket.emit('recognize', x);
 		});
 	});
 	

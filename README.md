@@ -1,3 +1,4 @@
+This application use mozilla deepspeech to perform Speech-To-Text searches on a given corpus.  
 ## Installation
 ### with docker
 `git clone https://github.com/nicosh/faber-js.git`  
