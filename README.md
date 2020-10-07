@@ -6,14 +6,16 @@
 `docker run  -p 3000:3000 faberjs`  
 
 ### manual isntallation 
-you need sox, and it need to be added  to PATH (on windows)
+clone the repo :  
+`git clone https://github.com/nicosh/faber-js.git`  
+
+Please note that you need sox, and it need to be added  to PATH (on windows)
 https://github.com/JoFrhwld/FAVE/wiki/Sox-on-Windows
 
 Also you need do manually download the models from `https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tensorflow_it.tar.xz` 
 and move them inside `app/DeepSpeech/models`  
 
 Then:  
-`git clone https://github.com/nicosh/faber-js.git`  
 `cd faber-js/app`  
 `npm install`  
 
