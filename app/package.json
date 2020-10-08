@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@cleandersonlobo/react-mic": "^1.2.0",
+    "antd": "^4.6.6",
     "audiobuffer-to-wav": "^1.0.0",
     "busboy": "^0.3.1",
     "deepspeech": "^0.8.2",

@@ -9,13 +9,11 @@ const N_CONTEXT = 9;
 const ALPHABET = './models/alphabet.txt'
 const BEAM_WIDTH = 500;
 const MODEL_PREFIX = "transfer_model_"
-const fetch = require('node-fetch');
-const { isRegExp } = require('util');
 
-const babelfish = async (file, usetransfer, Buffer) => {
+const babelfish = async (file, usetransfer) => {
 	var path = require("path");
 	const pathprefix = usetransfer ? MODEL_PREFIX : ""
-	let modelPath = path.resolve(`./DeepSpeech/models/${pathprefix}output_graph.pbmm`);
+	let modelPath = path.resolve(`./models/${pathprefix}output_graph.pbmm`);
 	const model = new DeepSpeech.Model(
 		modelPath,
 		N_FEATURES,
@@ -25,25 +23,20 @@ const babelfish = async (file, usetransfer, Buffer) => {
 	);
 
 	let desiredSampleRate = model.sampleRate();
-	let scorerPath = path.resolve(`./DeepSpeech/models/${pathprefix}scorer`);
-
-	if (file) {
-		let audioFile = path.resolve(file);
-		if (!Fs.existsSync(audioFile)) {
-			console.log('file missing:', audioFile);
-			process.exit();
-		}
+	let scorerPath = path.resolve(`./models/${pathprefix}scorer`);
+	let audioFile = path.resolve(file);
+	
+	if (!Fs.existsSync(audioFile)) {
+		console.log('file missing:', audioFile);
+		process.exit();
 	}
 
-	const buffer = file ? Fs.readFileSync(audioFile) : Buffer
-
+	const buffer = Fs.readFileSync(audioFile)
 	const result = Wav.decode(buffer);
 
 	if (result.sampleRate < desiredSampleRate) {
 		console.error('Warning: original sample rate (' + result.sampleRate + ') is lower than ' + desiredSampleRate + 'Hz. Up-sampling might produce erratic speech recognition.');
 	}
-
-
 
 	function bufferToStream(buffer) {
 		let stream = new Duplex();
@@ -72,14 +65,12 @@ const babelfish = async (file, usetransfer, Buffer) => {
 
 	audioStream.on('finish', () => {
 		let audioBuffer = audioStream.toBuffer();
-
 		const audioLength = (audioBuffer.length / 2) * (1 / desiredSampleRate);
 		console.log('audio length', audioLength);
-
 		let result = model.stt(audioBuffer);
-
 		console.log('result:', result);
 	})
 }
-module.exports = babelfish
-//babelfish("./DeepSpeech/models/test.wav", false)
+exports.babelfish = babelfish
+
+//babelfish("./models/samples/5.wav", false)

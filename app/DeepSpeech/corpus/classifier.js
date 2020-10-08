@@ -34,7 +34,37 @@ const LoadClassifier = async (text, obj) => {
     })
 }
 
-exports.LoadClassifier = LoadClassifier
+LevenshteinDistance = (t,obj) =>{
+    const corpus = require("./corpus")
+    let main = []
+    corpus.forEach(el =>{
+        try{
+            let {testo,titolo} = el
+            let result = natural.LevenshteinDistance(t, testo, {search: true})
+            main.push({titolo,...result})
+        }catch(e){
+
+        }
+    })
+    main.sort(function(a, b) {
+        let  keyA = a.distance
+        let  keyB = b.distance
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
+    });
+    return {
+        ...obj,
+        guess :main[0].titolo
+    }
+      
+}
+
+const classify = (t,obj,c)=>{
+    return c ? LoadClassifier(t,obj) : LevenshteinDistance(t,obj)
+}
+
+exports.LoadClassifier = classify
 
 //LoadClassifier()
 //console.log(classifier.classify('nella mia ora di libertà'));

@@ -2,22 +2,17 @@ const app = require('express')()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const next = require('next')
-const http = require('http');
-const socketIO = require('socket.io');
 const DeepSpeech = require('deepspeech');
 const VAD = require('node-vad');
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
-const {LoadClassifier} = require("./DeepSpeech/corpus/classifier")
-let DEEPSPEECH_MODEL = __dirname + '/DeepSpeech/models/'; // path to deepspeech english model directory
+const { LoadClassifier } = require("./DeepSpeech/corpus/classifier")
+let DEEPSPEECH_MODEL = __dirname + '/DeepSpeech/models/'; // path to deepspeech italian model directory
 let SILENCE_THRESHOLD = 200; // how many milliseconds of inactivity before processing the audio
-const SERVER_PORT = 4000; // websocket server port
 
-// const VAD_MODE = VAD.Mode.NORMAL;
-// const VAD_MODE = VAD.Mode.LOW_BITRATE;
-// const VAD_MODE = VAD.Mode.AGGRESSIVE;
+
 const VAD_MODE = VAD.Mode.VERY_AGGRESSIVE;
 const vad = new VAD(VAD_MODE);
 function createModel(modelDir) {
@@ -29,7 +24,6 @@ function createModel(modelDir) {
 }
 
 let italianModel = createModel(DEEPSPEECH_MODEL);
-
 let modelStream;
 let recordedChunks = 0;
 let silenceStart = null;
@@ -54,16 +48,16 @@ function processAudioStream(data, callback) {
 				break;
 			default:
 				console.log('default', res);
-				
+
 		}
 	});
-	
+
 	// timeout after 1s of inactivity
 	clearTimeout(endTimeout);
-	endTimeout = setTimeout(function() {
+	endTimeout = setTimeout(function () {
 		console.log('timeout');
 		resetAudioStream();
-	},1000);
+	}, 1000);
 }
 
 function endAudioStream(callback) {
@@ -87,9 +81,9 @@ function resetAudioStream() {
 function processSilence(data, callback) {
 	if (recordedChunks > 0) { // recording is on
 		process.stdout.write('-'); // silence detected while recording
-		
+
 		feedAudioContent(data);
-		
+
 		if (silenceStart === null) {
 			silenceStart = new Date().getTime();
 		}
@@ -147,7 +141,7 @@ function processVoice(data) {
 		process.stdout.write('='); // still recording
 	}
 	recordedChunks++;
-	
+
 	data = addBufferedSilence(data);
 	feedAudioContent(data);
 }
@@ -165,8 +159,8 @@ function finishStream() {
 		if (text) {
 			console.log('');
 			console.log('Recognized Text:', text);
-            let recogTime = new Date().getTime() - start.getTime();
-            let tmp = {
+			let recogTime = new Date().getTime() - start.getTime();
+			let tmp = {
 				text,
 				recogTime,
 				audioLength: Math.round(recordedAudioLength)
@@ -196,42 +190,45 @@ function feedAudioContent(chunk) {
 
 io.set('origins', '*:*');
 
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
 	console.log('client connected');
-	
+
 	socket.once('disconnect', () => {
 		console.log('client disconnected');
 	});
-	
+
 	createStream();
-	
-	socket.on('stream-data', async function(data) {
-		processAudioStream(data, async (results) => {
-            let x = await LoadClassifier(results.text,results)
+
+	socket.on('stream-data', async function (data) {
+		let { audio, useClassifier } = data
+		processAudioStream(audio, async (results) => {
+			socket.emit('recognize', { isstemp: true, results });
+			let x = await LoadClassifier(results.text, results, useClassifier)
 			socket.emit('recognize', x);
 		});
 	});
-	
-	socket.on('stream-end', async function() {
+
+	socket.on('stream-end', async function () {
+		let { audio, useClassifier } = data
 		endAudioStream(async (results) => {
-            let x = await LoadClassifier(results.text,results)
+			let x = await LoadClassifier(results.text, results, useClassifier)
 			socket.emit('recognize', x);
 		});
 	});
-	
-	socket.on('stream-reset', function() {
+
+	socket.on('stream-reset', function () {
 		resetAudioStream();
 	});
 });
 
 nextApp.prepare().then(() => {
 
-  app.get('*', (req, res) => {
-    return nextHandler(req, res)
-  })
+	app.get('*', (req, res) => {
+		return nextHandler(req, res)
+	})
 
-  server.listen(port, err => {
-    if (err) throw err
-    console.log(`> Ready on http://localhost:${port}`)
-  })
+	server.listen(port, err => {
+		if (err) throw err
+		console.log(`> Ready on http://localhost:${port}`)
+	})
 })
