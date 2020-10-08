@@ -20,6 +20,8 @@ function createModel(modelDir) {
 	let scorerPath = modelDir + 'scorer';
 	let model = new DeepSpeech.Model(modelPath);
 	model.enableExternalScorer(scorerPath);
+	model.setScorerAlphaBeta(0.75, 1.85)
+
 	return model;
 }
 
