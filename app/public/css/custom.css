@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Oranienbaum&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+body{
+  font-family: 'Poppins', sans-serif;
+}
 .flexbox-center {
     display: flex;
     justify-content: center;
@@ -17,7 +20,6 @@
   overflow: hidden;
 }
 h1{
-  font-family: 'Oranienbaum', serif;
   color: #fff;
 }
 .fullh{
@@ -75,10 +77,12 @@ footer{
 }
 
 
-
+.dark{
+  font-size: 20px;
+}
 
 .mmh{
-  font-size: 2.5rem;
+  font-size: 20px;
   color:transparent;
   text-shadow:0 0 rgba(255,255,255,0.06);
   background-image:url("https://i.imgur.com/uFpLbYt.png");
@@ -98,4 +102,84 @@ footer{
 @keyframes size{
   from{background-size:100px 0;}
   to{background-size:100px 140px;}
+}
+.animated-container{
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  position: absolute;
+  left: 0;
+  overflow: hidden;
+}
+.container-c {
+  width: 100%;
+  overflow: hidden;
+  left: 0;
+  width: 120px;
+  top: 8px;
+}
+
+.loader {
+  max-width: 7rem;
+  width: 100%;
+  height: auto;
+  stroke-linecap: round;
+}
+
+circle {
+  fill: none;
+  stroke-width: 3.5;
+  -webkit-animation-name: preloader;
+          animation-name: preloader;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-in-out;
+          animation-timing-function: ease-in-out;
+  -webkit-transform-origin: 170px 170px;
+          transform-origin: 170px 170px;
+  will-change: transform;
+}
+circle:nth-of-type(1) {
+  stroke-dasharray: 550px;
+}
+circle:nth-of-type(2) {
+  stroke-dasharray: 500px;
+}
+circle:nth-of-type(3) {
+  stroke-dasharray: 450px;
+}
+circle:nth-of-type(4) {
+  stroke-dasharray: 300px;
+}
+circle:nth-of-type(1) {
+  -webkit-animation-delay: -0.15s;
+          animation-delay: -0.15s;
+}
+circle:nth-of-type(2) {
+  -webkit-animation-delay: -0.3s;
+          animation-delay: -0.3s;
+}
+circle:nth-of-type(3) {
+  -webkit-animation-delay: -0.45s;
+          animation-delay: -0.45s;
+}
+circle:nth-of-type(4) {
+  -webkit-animation-delay: -0.6s;
+          animation-delay: -0.6s;
+}
+
+@-webkit-keyframes preloader {
+  50% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes preloader {
+  50% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }

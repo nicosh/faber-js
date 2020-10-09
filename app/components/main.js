@@ -30,7 +30,7 @@ class Main extends React.Component {
   componentDidMount() {
     document.addEventListener("keydown", this.onKeyDownHandler);
     let recognitionCount = 0;
-    this.socket = io.connect('http://localhost:3000', {});
+    this.socket = io.connect();
     this.socket.on('connect', () => {
       console.log('socket connected');
       this.setState({ connected: true });
@@ -45,12 +45,14 @@ class Main extends React.Component {
     this.socket.on('recognize', (results) => {
       if (results.isstemp) {
         results.results.guess = ""
+        this.stopRecording();
         this.setState({ recognitionOutput: [results.results] })
       } else {
         console.log('recognized:', results);
         const { recognitionOutput } = this.state;
         results.id = recognitionCount++;
         recognitionOutput.unshift(results);
+        this.stopRecording();
         this.setState({ recognitionOutput });
       }
     });
@@ -145,6 +147,7 @@ class Main extends React.Component {
         recording: true,
         recordingStart: new Date().getTime(),
         recordingTime: 0,
+        recognitionOutput: [],
         progress: 0
       }, () => {
         this.startMicrophone();
@@ -173,8 +176,7 @@ class Main extends React.Component {
       })
         .then(success)
         .catch(fail);
-    }
-    else {
+    } else {
       navigator.getUserMedia({
         video: false,
         audio: true
@@ -193,8 +195,7 @@ class Main extends React.Component {
 
       this.setState({
         recording: false,
-        progress: 0,
-        recognitionOutput: []
+        progress: 0
       }, () => {
         this.stopMicrophone();
       });
@@ -238,7 +239,6 @@ class Main extends React.Component {
     let { recordingTime, record, recording, useClassifier, showRecognizedText, debug, tempresults, recognitionOutput } = this.state
     return (
       <div>
-
         {debug &&
           <div className="debugwindow">
             show RecognizedText : {showRecognizedText ? "yes" : "no"} <br />
@@ -249,6 +249,18 @@ class Main extends React.Component {
           </div>
         }
         <h1 className={`mt-4 dark ${recording ? "gradient-border" : ""}`}>Press space and   {recording ? "stop" : "start"} <span className={recording ? "mmh" : ""}>recording</span> </h1>
+        {recording &&
+          <div className="flexbox-center animated-container">
+            <div className="container-c">
+              <svg className="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
+                <circle cx="170" cy="170" r="160" stroke="#fff" />
+                <circle cx="170" cy="170" r="135" stroke="#fff" />
+                <circle cx="170" cy="170" r="110" stroke="#fff" />
+                <circle cx="170" cy="170" r="85" stroke="#fff" />
+              </svg>
+            </div>
+          </div>
+        }
         {this.renderRecognitionOutput()}
         <Footer debug={debug} showRecognizedText={showRecognizedText} swichState={this.swichState} useClassifier={useClassifier} stopRecording={this.stopRecording} />
       </div>

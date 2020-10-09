@@ -9,19 +9,23 @@ const dev = process.env.NODE_ENV !== 'production'
 const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
 const { LoadClassifier } = require("./DeepSpeech/corpus/classifier")
+
+
 let DEEPSPEECH_MODEL = __dirname + '/DeepSpeech/models/'; // path to deepspeech italian model directory
 let SILENCE_THRESHOLD = 200; // how many milliseconds of inactivity before processing the audio
 
+const ALPHA = 0.75 // 0.75
+const BETA = 1.85 //1.85
 
 const VAD_MODE = VAD.Mode.VERY_AGGRESSIVE;
 const vad = new VAD(VAD_MODE);
-function createModel(modelDir) {
+
+const createModel = (modelDir) => {
 	let modelPath = modelDir + 'output_graph.pbmm';
 	let scorerPath = modelDir + 'scorer';
 	let model = new DeepSpeech.Model(modelPath);
 	model.enableExternalScorer(scorerPath);
-	model.setScorerAlphaBeta(0.75, 1.85)
-
+	model.setScorerAlphaBeta(ALPHA, BETA)
 	return model;
 }
 
@@ -33,7 +37,7 @@ let recordedAudioLength = 0;
 let endTimeout = null;
 let silenceBuffers = [];
 
-function processAudioStream(data, callback) {
+const processAudioStream = (data, callback) => {
 	vad.processAudio(data, 16000).then((res) => {
 		switch (res) {
 			case VAD.Event.ERROR:
@@ -62,7 +66,7 @@ function processAudioStream(data, callback) {
 	}, 1000);
 }
 
-function endAudioStream(callback) {
+const endAudioStream = (callback) => {
 	console.log('[end]');
 	let results = intermediateDecode();
 	if (results) {
@@ -72,7 +76,7 @@ function endAudioStream(callback) {
 	}
 }
 
-function resetAudioStream() {
+const resetAudioStream = () => {
 	clearTimeout(endTimeout);
 	console.log('[reset]');
 	intermediateDecode(); // ignore results
@@ -80,7 +84,7 @@ function resetAudioStream() {
 	silenceStart = null;
 }
 
-function processSilence(data, callback) {
+const processSilence = (data, callback) => {
 	if (recordedChunks > 0) { // recording is on
 		process.stdout.write('-'); // silence detected while recording
 
@@ -109,7 +113,7 @@ function processSilence(data, callback) {
 	}
 }
 
-function bufferSilence(data) {
+const bufferSilence = (data) => {
 	// VAD has a tendency to cut the first bit of audio data from the start of a recording
 	// so keep a buffer of that first bit of audio and in addBufferedSilence() reattach it to the beginning of the recording
 	silenceBuffers.push(data);
@@ -118,7 +122,7 @@ function bufferSilence(data) {
 	}
 }
 
-function addBufferedSilence(data) {
+const addBufferedSilence = (data) => {
 	let audioBuffer;
 	if (silenceBuffers.length) {
 		silenceBuffers.push(data);
@@ -133,7 +137,7 @@ function addBufferedSilence(data) {
 	return audioBuffer;
 }
 
-function processVoice(data) {
+const processVoice = (data) => {
 	silenceStart = null;
 	if (recordedChunks === 0) {
 		console.log('');
@@ -148,13 +152,13 @@ function processVoice(data) {
 	feedAudioContent(data);
 }
 
-function createStream() {
+const createStream = () => {
 	modelStream = italianModel.createStream();
 	recordedChunks = 0;
 	recordedAudioLength = 0;
 }
 
-function finishStream() {
+const finishStream = () => {
 	if (modelStream) {
 		let start = new Date();
 		let text = modelStream.finishStream();
@@ -178,13 +182,13 @@ function finishStream() {
 	modelStream = null;
 }
 
-function intermediateDecode() {
+const intermediateDecode = () => {
 	let results = finishStream();
 	createStream();
 	return results;
 }
 
-function feedAudioContent(chunk) {
+const feedAudioContent = (chunk) => {
 	recordedAudioLength += (chunk.length / 2) * (1 / 16000) * 1000;
 	modelStream.feedAudioContent(chunk);
 }
