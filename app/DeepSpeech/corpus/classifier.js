@@ -55,6 +55,7 @@ LevenshteinDistance = (t,obj) =>{
     });
     return {
         ...obj,
+        raw : main[0],
         guess :main[0].titolo
     }
       

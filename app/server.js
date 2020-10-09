@@ -11,10 +11,9 @@ const nextHandler = nextApp.getRequestHandler()
 const { LoadClassifier } = require("./DeepSpeech/corpus/classifier")
 
 
-let DEEPSPEECH_MODEL = __dirname + '/DeepSpeech/models/'; // path to deepspeech italian model directory
-let SILENCE_THRESHOLD = 200; // how many milliseconds of inactivity before processing the audio
-
-const ALPHA = 0.75 // 0.75
+const  DEEPSPEECH_MODEL = __dirname + '/DeepSpeech/models/'; // path to deepspeech italian model directory
+const SILENCE_THRESHOLD = 200; // how many milliseconds of inactivity before processing the audio
+const ALPHA = 0.25 // 0.75
 const BETA = 1.85 //1.85
 
 const VAD_MODE = VAD.Mode.VERY_AGGRESSIVE;

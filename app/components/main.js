@@ -23,7 +23,8 @@ class Main extends React.Component {
       useClassifier: false,
       showRecognizedText: true,
       debug: false,
-      tempresults: {}
+      tempresults: {},
+      StopRecordingOnRecognition : true
     }
   }
 
@@ -45,14 +46,14 @@ class Main extends React.Component {
     this.socket.on('recognize', (results) => {
       if (results.isstemp) {
         results.results.guess = ""
-        this.stopRecording();
+        this.state.StopRecordingOnRecognition ? this.stopRecording() : false
         this.setState({ recognitionOutput: [results.results] })
       } else {
         console.log('recognized:', results);
         const { recognitionOutput } = this.state;
         results.id = recognitionCount++;
         recognitionOutput.unshift(results);
-        this.stopRecording();
+        this.state.StopRecordingOnRecognition ? this.stopRecording() : false
         this.setState({ recognitionOutput });
       }
     });
@@ -73,7 +74,9 @@ class Main extends React.Component {
   renderRecognitionOutput() {
     let { showRecognizedText } = this.state
     let r = this.state.recognitionOutput[0]
+
     if (r) {
+
       return (
         <div className="row flexbox-center fullh">
           <div className="col-md-12">
@@ -90,7 +93,20 @@ class Main extends React.Component {
               />
             }
             <br />
-            <TextTransition
+            {r.guess == "" && 
+              <TextTransition
+              inline={true}
+              delay={300}
+              className={"big2"}
+              text={<div className="loading text-center"></div>}
+              direction={"up"}
+              springConfig={presets.gentle}
+              spring={presets.gentle}
+
+            />
+          }
+            {r.guess !== "" && 
+              <TextTransition
               inline={true}
               delay={300}
               className={"big2"}
@@ -98,8 +114,8 @@ class Main extends React.Component {
               direction={"up"}
               springConfig={presets.gentle}
               spring={presets.gentle}
-
             />
+            }
           </div>
 
         </div>)
@@ -110,7 +126,7 @@ class Main extends React.Component {
   }
 
   createAudioProcessor(audioContext, audioSource) {
-    let { useClassifier } = this.state
+    let { useClassifier,StopRecordingOnRecognition } = this.state
     let processor = audioContext.createScriptProcessor(4096, 1, 1);
     const sampleRate = audioSource.context.sampleRate;
     let downsampler = new Worker(DOWNSAMPLING_WORKER);
@@ -236,7 +252,7 @@ class Main extends React.Component {
   }
 
   render() {
-    let { recordingTime, record, recording, useClassifier, showRecognizedText, debug, tempresults, recognitionOutput } = this.state
+    let { recordingTime, record, recording, useClassifier, showRecognizedText, debug, tempresults, recognitionOutput,StopRecordingOnRecognition } = this.state
     return (
       <div>
         {debug &&
@@ -248,7 +264,7 @@ class Main extends React.Component {
             <pre>{JSON.stringify(recognitionOutput[0], null, 2)}</pre>
           </div>
         }
-        <h1 className={`mt-4 dark ${recording ? "gradient-border" : ""}`}>Press space and   {recording ? "stop" : "start"} <span className={recording ? "mmh" : ""}>recording</span> </h1>
+        <h1 className={`mt-4  dark ${recording ? "gradient-border" : ""}`}>Press space and   {recording ? "stop" : "start"} <span className={recording ? "mmh" : ""}>recording</span> </h1>
         {recording &&
           <div className="flexbox-center animated-container">
             <div className="container-c">
@@ -262,7 +278,13 @@ class Main extends React.Component {
           </div>
         }
         {this.renderRecognitionOutput()}
-        <Footer debug={debug} showRecognizedText={showRecognizedText} swichState={this.swichState} useClassifier={useClassifier} stopRecording={this.stopRecording} />
+        <Footer 
+        StopRecordingOnRecognition={StopRecordingOnRecognition}
+        debug={debug} 
+        showRecognizedText={showRecognizedText} 
+        swichState={this.swichState} 
+        useClassifier={useClassifier} 
+        stopRecording={this.stopRecording} />
       </div>
     )
   }

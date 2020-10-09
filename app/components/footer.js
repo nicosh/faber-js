@@ -61,6 +61,7 @@ class Index extends React.Component {
                     <p>Use  Levenshtein Distance : <Switch onChange={(e) => { this.switch("useClassifier", !e) }} defaultChecked={!this.props.useClassifier} className="float-right" /></p>
                     <p>Show Recognized Text : <Switch onChange={(e) => { this.switch("showRecognizedText", e) }} className="float-right" defaultChecked={this.props.showRecognizedText} /></p>
                     <p>Show Debug Window : <Switch onChange={(e) => { this.switch("debug", e) }} className="float-right" defaultChecked={this.props.debug} /></p>
+                    <p>Stop recording on recognition : <Switch onChange={(e) => { this.switch("StopRecordingOnRecognition", e) }} className="float-right" defaultChecked={this.props.StopRecordingOnRecognition} /></p>
 
                 </Modal>
                 <Modal
@@ -70,8 +71,8 @@ class Index extends React.Component {
                     onCancel={this.handleCancel2}
                 >
                     <p>
-                        This app
-                        The app will try to guess which song of De andrè you are singing, or better, reading.  <br/>
+                       
+                        This app will try to guess which song of De andrè you are singing, or better, reading.  <br/>
                         To increase chanches of have a consistent speech-to-text translation try to speak as louder and clearer as possible.
                     </p>
                 </Modal>

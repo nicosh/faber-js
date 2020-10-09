@@ -12,14 +12,16 @@ At the moment, for text extraction, only 2 (really simple) algorithms are suppor
 
 ## Installation
 ### with docker
+The easiest way to install the app is using docker :   
+
 `git clone https://github.com/nicosh/faber-js.git`  
 `cd faber-js`  
 `docker build --tag "faberjs" .`  
 `docker run  -p 3000:3000 faberjs`  
 
 ### manual installation 
-Please note that you need sox, and it need to be added  to PATH (on windows) see 
-https://github.com/JoFrhwld/FAVE/wiki/Sox-on-Windows
+Please note that you need python and sox, sox need to be added  to PATH (on windows) see 
+https://github.com/JoFrhwld/FAVE/wiki/Sox-on-Windows and https://github.com/nodejs/node-gyp#installation
 
 clone the repo :  
 `git clone https://github.com/nicosh/faber-js.git`  
