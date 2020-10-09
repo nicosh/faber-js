@@ -24,7 +24,8 @@ class Main extends React.Component {
       showRecognizedText: true,
       debug: false,
       tempresults: {},
-      StopRecordingOnRecognition : true
+      StopRecordingOnRecognition : true,
+      Showmatchedsentence : false
     }
   }
 
@@ -72,11 +73,10 @@ class Main extends React.Component {
   }
 
   renderRecognitionOutput() {
-    let { showRecognizedText } = this.state
+    let { showRecognizedText,Showmatchedsentence } = this.state
     let r = this.state.recognitionOutput[0]
-
     if (r) {
-
+      let guess = Showmatchedsentence ? (r.raw ? r.raw.substring : "" ) : r.guess
       return (
         <div className="row flexbox-center fullh">
           <div className="col-md-12">
@@ -110,7 +110,7 @@ class Main extends React.Component {
               inline={true}
               delay={300}
               className={"big2"}
-              text={r.guess}
+              text={guess}
               direction={"up"}
               springConfig={presets.gentle}
               spring={presets.gentle}
@@ -252,7 +252,8 @@ class Main extends React.Component {
   }
 
   render() {
-    let { recordingTime, record, recording, useClassifier, showRecognizedText, debug, tempresults, recognitionOutput,StopRecordingOnRecognition } = this.state
+    let { recordingTime, record, recording, useClassifier, showRecognizedText, debug, tempresults, 
+    recognitionOutput,StopRecordingOnRecognition,Showmatchedsentence } = this.state
     return (
       <div>
         {debug &&
@@ -279,6 +280,7 @@ class Main extends React.Component {
         }
         {this.renderRecognitionOutput()}
         <Footer 
+        Showmatchedsentence={Showmatchedsentence}
         StopRecordingOnRecognition={StopRecordingOnRecognition}
         debug={debug} 
         showRecognizedText={showRecognizedText} 

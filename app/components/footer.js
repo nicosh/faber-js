@@ -62,7 +62,8 @@ class Index extends React.Component {
                     <p>Show Recognized Text : <Switch onChange={(e) => { this.switch("showRecognizedText", e) }} className="float-right" defaultChecked={this.props.showRecognizedText} /></p>
                     <p>Show Debug Window : <Switch onChange={(e) => { this.switch("debug", e) }} className="float-right" defaultChecked={this.props.debug} /></p>
                     <p>Stop recording on recognition : <Switch onChange={(e) => { this.switch("StopRecordingOnRecognition", e) }} className="float-right" defaultChecked={this.props.StopRecordingOnRecognition} /></p>
-
+                    <p>Show matched sentence (instead that song title)* : <Switch onChange={(e) => { this.switch("Showmatchedsentence", e) }} className="float-right" defaultChecked={this.props.Showmatchedsentence} /></p>
+                     <small>*Only with Levenshtein</small>
                 </Modal>
                 <Modal
                     title="Info"
