@@ -5,7 +5,7 @@ It uses [mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech) and the [Nod
 and [Natural](https://github.com/NaturalNode/natural) for text classification.
 
 ## About  
-The purpose of the app is to try  to guess which de andrè song you are singing (or, better, reading)  
+This project was carried out during  the [Mozilla Italia Developer Contest](https://github.com/MozillaItalia/DeepSpeech-Contest), the purpose of the app is to try  to guess which de andrè song you are singing (or, better, reading).  
 The app  streams the microphone audio from the browser to a NodeJS server (using socket.io) where DeepSpeech  will read the buffer and a classifier will classify the  DeepSpeech result.  
 You can find out more about the corpus [here](https://github.com/nicosh/faber-js/tree/main/app/DeepSpeech/corpus/corpus) while [here](https://github.com/nicosh/faber-js/blob/main/app/DeepSpeech/corpus/classifier.js) you can see how to train and load the classifier. 
 At the moment, for text extraction, only 2 (really simple) algorithms are supported : Levenshtein Distance (slower but more accurate) and Bayes Classification (faster but  less accurate).  
