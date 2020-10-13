@@ -5,7 +5,7 @@ It uses [mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech) and the [Nod
 and [Natural](https://github.com/NaturalNode/natural) for text classification.
 
 ## About  
-This project was carried out during  the [Mozilla Italia Developer Contest](https://github.com/MozillaItalia/DeepSpeech-Contest), the purpose of the app is to try  to guess which de andrè song you are singing (or, better, reading).  
+This project was carried out during  the [Mozilla Italia Developer Contest](https://github.com/MozillaItalia/DeepSpeech-Contest), the purpose of the app is to try  to guess which [Fabrizio De André](https://en.wikipedia.org/wiki/Fabrizio_De_Andr%C3%A9) song you are singing (or, better, reading).  
 The app  streams the microphone audio from the browser to a NodeJS server (using socket.io) where DeepSpeech  will read the buffer and a classifier will classify the  DeepSpeech result.  
 You can find out more about the corpus [here](https://github.com/nicosh/faber-js/tree/main/app/DeepSpeech/corpus/corpus) while [here](https://github.com/nicosh/faber-js/blob/main/app/DeepSpeech/corpus/classifier.js) you can see how to train and load the classifier. 
 At the moment, for text extraction, only 2 (really simple) algorithms are supported : Levenshtein Distance (slower but more accurate) and Bayes Classification (faster but  less accurate).   
@@ -49,3 +49,11 @@ Build for production:
 or run in dev mode  
 `npm run dev`  
 
+### Tests and know issues
+At the moment seems that voice recognition using .wav files have better performance compared to voice recognition using live streaming.  
+Some simple test using static files can be found [here](https://github.com/nicosh/faber-js/blob/main/app/DeepSpeech/test.js). 
+To compare the results is enough to run the app and try to pronounce the same sentences as the files above or just play the files and record the speakers with the microphone. 
+Some things to investigate : 
+- Maybe live streaming need a better configuration / fine tuning
+- Microphone noise / surrounding noise  affects too much speech-to-text extraction
+- Live streaming performances with good quality microphones vs cheap / lowquality 

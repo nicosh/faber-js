@@ -4,27 +4,21 @@ const Sox = require('sox-stream');
 const MemoryStream = require('memory-stream');
 const Duplex = require('stream').Duplex;
 const Wav = require('node-wav');
-const N_FEATURES = 26;
-const N_CONTEXT = 9;
-const ALPHABET = './models/alphabet.txt'
-const BEAM_WIDTH = 500;
 const MODEL_PREFIX = "transfer_model_"
-
+const ALPHA = 0.25 // 0.75
+const BETA = 1.85 //1.85
 const babelfish = async (file, usetransfer) => {
 	var path = require("path");
 	const pathprefix = usetransfer ? MODEL_PREFIX : ""
 	let modelPath = path.resolve(`./models/${pathprefix}output_graph.pbmm`);
-	const model = new DeepSpeech.Model(
-		modelPath,
-		N_FEATURES,
-		N_CONTEXT,
-		ALPHABET,
-		BEAM_WIDTH
-	);
-
+	const model = new DeepSpeech.Model(modelPath);
 	let desiredSampleRate = model.sampleRate();
 	let scorerPath = path.resolve(`./models/${pathprefix}scorer`);
 	let audioFile = path.resolve(file);
+	model.enableExternalScorer(scorerPath);
+	model.setScorerAlphaBeta(ALPHA, BETA)
+
+
 	
 	if (!Fs.existsSync(audioFile)) {
 		console.log('file missing:', audioFile);
@@ -65,12 +59,8 @@ const babelfish = async (file, usetransfer) => {
 
 	audioStream.on('finish', () => {
 		let audioBuffer = audioStream.toBuffer();
-		const audioLength = (audioBuffer.length / 2) * (1 / desiredSampleRate);
-		console.log('audio length', audioLength);
 		let result = model.stt(audioBuffer);
-		console.log('result:', result);
+		console.log('speech to text:', result);
 	})
 }
 exports.babelfish = babelfish
-
-//babelfish("./models/samples/5.wav", false)
