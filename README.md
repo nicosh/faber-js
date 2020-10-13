@@ -16,7 +16,7 @@ Live demo (may be offline) : https://deepspeech.czzncl.dev/
 - **Use Levenshtein Distance** : wether using Levenshtein Distance or Bayes for text classification.
 - **Show Recognized Text** : wether show or not deepSpeech Recognized text
 - **Show Debug Window** : wether show or not a debug windows that contains some information about the app status and payload.
-- **Stop recording on recognition** : wether stop speech-to-text and text classification once a sentences is recognized and classified
+- **Stop recording on recognition** : wether stop speech-to-text and text classification once a sentence is recognized and classified
 - **Show matched sentence (instead that song title)*** : Show the matched sentence (of the song) for the current recognized speech-to-text
   
 *Only with Levenshtein
