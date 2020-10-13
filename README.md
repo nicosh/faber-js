@@ -10,7 +10,7 @@ The app  streams the microphone audio from the browser to a NodeJS server (using
 You can find out more about the corpus [here](https://github.com/nicosh/faber-js/tree/main/app/DeepSpeech/corpus/corpus) while [here](https://github.com/nicosh/faber-js/blob/main/app/DeepSpeech/corpus/classifier.js) you can see how to train and load the classifier. 
 At the moment, for text extraction, only 2 (really simple) algorithms are supported : Levenshtein Distance (slower but more accurate) and Bayes Classification (faster but  less accurate).   
 
-Live demo : https://deepspeech.czzncl.dev/
+Live demo (may be offline) : https://deepspeech.czzncl.dev/
 ### App settings 
 
 - **Use Levenshtein Distance** : wether using Levenshtein Distance or Bayes for text classification.
