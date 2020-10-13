@@ -49,7 +49,7 @@ Build for production:
 or run in dev mode  
 `npm run dev`  
 
-### Tests and know issues
+## Tests and know issues
 At the moment seems that voice recognition using .wav files have better performance compared to voice recognition using live streaming.  
 Some simple test using static files can be found [here](https://github.com/nicosh/faber-js/blob/main/app/DeepSpeech/test.js). 
 To compare the results is enough to run the app and try to pronounce the same sentences as the files above or just play the files and record the speakers with the microphone. 
