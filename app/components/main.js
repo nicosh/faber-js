@@ -24,8 +24,8 @@ class Main extends React.Component {
       showRecognizedText: true,
       debug: false,
       tempresults: {},
-      StopRecordingOnRecognition : true,
-      Showmatchedsentence : false
+      StopRecordingOnRecognition: true,
+      Showmatchedsentence: false
     }
   }
 
@@ -35,7 +35,7 @@ class Main extends React.Component {
     this.socket = io.connect();
     this.socket.on('connect', () => {
       console.log('socket connected');
-      this.setState({ connected: true });
+      this.setState({ connected: true});
     });
 
     this.socket.on('disconnect', () => {
@@ -73,10 +73,10 @@ class Main extends React.Component {
   }
 
   renderRecognitionOutput() {
-    let { showRecognizedText,Showmatchedsentence } = this.state
+    let { showRecognizedText, Showmatchedsentence } = this.state
     let r = this.state.recognitionOutput[0]
     if (r) {
-      let guess = Showmatchedsentence ? (r.raw ? r.raw.substring : "" ) : r.guess
+      let guess = Showmatchedsentence ? (r.raw ? r.raw.substring : "") : r.guess
       return (
         <div className="row flexbox-center fullh">
           <div className="col-md-12">
@@ -93,28 +93,28 @@ class Main extends React.Component {
               />
             }
             <br />
-            {r.guess == "" && 
+            {r.guess == "" &&
               <TextTransition
-              inline={true}
-              delay={300}
-              className={"big2"}
-              text={<div className="loading text-center"></div>}
-              direction={"up"}
-              springConfig={presets.gentle}
-              spring={presets.gentle}
+                inline={true}
+                delay={300}
+                className={"big2"}
+                text={<div className="loading text-center"></div>}
+                direction={"up"}
+                springConfig={presets.gentle}
+                spring={presets.gentle}
 
-            />
-          }
-            {r.guess !== "" && 
+              />
+            }
+            {r.guess !== "" &&
               <TextTransition
-              inline={true}
-              delay={300}
-              className={"big2"}
-              text={guess}
-              direction={"up"}
-              springConfig={presets.gentle}
-              spring={presets.gentle}
-            />
+                inline={true}
+                delay={300}
+                className={"big2"}
+                text={guess}
+                direction={"up"}
+                springConfig={presets.gentle}
+                spring={presets.gentle}
+              />
             }
           </div>
 
@@ -126,7 +126,7 @@ class Main extends React.Component {
   }
 
   createAudioProcessor(audioContext, audioSource) {
-    let { useClassifier,StopRecordingOnRecognition } = this.state
+    let { useClassifier, StopRecordingOnRecognition } = this.state
     let processor = audioContext.createScriptProcessor(4096, 1, 1);
     const sampleRate = audioSource.context.sampleRate;
     let downsampler = new Worker(DOWNSAMPLING_WORKER);
@@ -252,8 +252,8 @@ class Main extends React.Component {
   }
 
   render() {
-    let { recordingTime, record, recording, useClassifier, showRecognizedText, debug, tempresults, 
-    recognitionOutput,StopRecordingOnRecognition,Showmatchedsentence } = this.state
+    let { recordingTime, record, recording, useClassifier, showRecognizedText, debug, tempresults,
+        recognitionOutput, StopRecordingOnRecognition, Showmatchedsentence, loading } = this.state
     return (
       <div>
         {debug &&
@@ -279,14 +279,14 @@ class Main extends React.Component {
           </div>
         }
         {this.renderRecognitionOutput()}
-        <Footer 
-        Showmatchedsentence={Showmatchedsentence}
-        StopRecordingOnRecognition={StopRecordingOnRecognition}
-        debug={debug} 
-        showRecognizedText={showRecognizedText} 
-        swichState={this.swichState} 
-        useClassifier={useClassifier} 
-        stopRecording={this.stopRecording} />
+        <Footer
+          Showmatchedsentence={Showmatchedsentence}
+          StopRecordingOnRecognition={StopRecordingOnRecognition}
+          debug={debug}
+          showRecognizedText={showRecognizedText}
+          swichState={this.swichState}
+          useClassifier={useClassifier}
+          stopRecording={this.stopRecording} />
       </div>
     )
   }

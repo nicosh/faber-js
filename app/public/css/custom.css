@@ -28,6 +28,7 @@ h1{
   top: 0;
   width: 99%;
   overflow: hidden;
+  left: 0;
 }
 .big {
   font-size: 3vw;

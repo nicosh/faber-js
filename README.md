@@ -8,8 +8,18 @@ and [Natural](https://github.com/NaturalNode/natural) for text classification.
 This project was carried out during  the [Mozilla Italia Developer Contest](https://github.com/MozillaItalia/DeepSpeech-Contest), the purpose of the app is to try  to guess which de andrè song you are singing (or, better, reading).  
 The app  streams the microphone audio from the browser to a NodeJS server (using socket.io) where DeepSpeech  will read the buffer and a classifier will classify the  DeepSpeech result.  
 You can find out more about the corpus [here](https://github.com/nicosh/faber-js/tree/main/app/DeepSpeech/corpus/corpus) while [here](https://github.com/nicosh/faber-js/blob/main/app/DeepSpeech/corpus/classifier.js) you can see how to train and load the classifier. 
-At the moment, for text extraction, only 2 (really simple) algorithms are supported : Levenshtein Distance (slower but more accurate) and Bayes Classification (faster but  less accurate).  
+At the moment, for text extraction, only 2 (really simple) algorithms are supported : Levenshtein Distance (slower but more accurate) and Bayes Classification (faster but  less accurate).   
 
+Live demo : https://deepspeech.czzncl.dev/
+### App settings 
+
+- **Use Levenshtein Distance** : wether using Levenshtein Distance or Bayes for text classification.
+- **Show Recognized Text** : wether show or not deepSpeech Recognized text
+- **Show Debug Window** : wether show or not a debug windows that contains some information about the app status and payload.
+- **Stop recording on recognition** : wether stop speech-to-text and text classification once a sentences is recognized and classified
+- **Show matched sentence (instead that song title)*** : Show the matched sentence (of the song) for the current recognized speech-to-text
+  
+*Only with Levenshtein
 ## Installation
 ### with docker
 The easiest way to install the app is using docker :   
